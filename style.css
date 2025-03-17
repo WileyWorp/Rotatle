@@ -138,3 +138,9 @@ footer {
         --global-scale: .75;
     }
 }
+
+@media screen and (max-width: 720px) and (max-height: 1280px) {
+    :root {
+        --global-scale: .5;
+    }
+}
