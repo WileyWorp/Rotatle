@@ -28,7 +28,10 @@
     --tile-border-radius: 8px;
     --button-border-radius: 8px;
     --tile-border: 2px solid var(--secondary-text-color);
+
+    --global-scale: 1;
 }
+
 html body {
     min-height: 100%;
     margin: 0;
@@ -56,14 +59,14 @@ html body main header {
     justify-content: center;
     width: 100%;
     font-size: var(--heading-font-size);
-    scale: .75;
+    scale: var(--global-scale)
 }
 
 .hints {
     display: flex;
     width: 100%;
     justify-content: center;
-    scale: .75;
+    scale: var(--global-scale)
 }
 
 .hints .hintLabel {
@@ -77,7 +80,7 @@ main .grid-container {
     gap: 10px;
     grid-template-rows: repeat(6, 100px);
     grid-template-columns: repeat(5, 100px);
-    scale: .75;
+    scale: var(--global-scale)
 }
 
 .grid-container .grid-item {
@@ -94,7 +97,7 @@ main .keyboard-container {
     display: grid;
     align-self: center;
     gap: 10px;
-    scale: .75;
+    scale: var(--global-scale)
 }
 
 .keyboard-container .grid-row {
@@ -131,19 +134,7 @@ footer {
 
 /* media queries  */
 @media screen and (max-width: 1920px) and (max-height: 1080px) {
-    header {
-        scale: 1.25;
-    }
-
-    .hints {
-        scale: 1.25;
-    }
-
-    .grid-container {
-        scale: 1.25;
-    }
-
-    .keyboard-container {
-        scale: 1.25;
+    :root {
+        --global-scale: .75;
     }
 }
