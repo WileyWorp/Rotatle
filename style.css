@@ -3,7 +3,7 @@
     --background-color: #1a1a2e;
     --primary-text-color: #ffffff;
     --secondary-text-color: #d1d1e0;
-    --tile-color: #16213e;
+    --tile-color: #16213e87;
     --correct-tile-color: #6a994e;
     --close-tile-color: #f2bb05;
     --incorrect-tile-color: #ef233c;
@@ -29,7 +29,9 @@
     --button-border-radius: 8px;
     --tile-border: 2px solid var(--secondary-text-color);
 
+    /* Standardized things */
     --global-scale: 1;
+    --standard-gap: 10px;
 }
 
 html body {
@@ -77,10 +79,10 @@ html body main header {
 main .grid-container {
     align-self: center;
     display: grid;
-    gap: 10px;
+    gap: var(--standard-gap);
     grid-template-rows: repeat(6, 100px);
     grid-template-columns: repeat(5, 100px);
-    scale: var(--global-scale)
+    scale: var(--global-scale);
 }
 
 .grid-container .grid-item {
@@ -92,18 +94,58 @@ main .grid-container {
     font-size: 5rem;
 }
 
+/* Proximity bars */
+.prox-grid-container {
+    position: absolute;
+    align-self: center;
+    display: grid;
+    gap: var(--standard-gap);
+    grid-template-rows: repeat(6, 100px);
+    height: 100%;
+    width: 100%;
+}
+
+.prox-grid-item {
+    background-color: rgba(22, 54, 82, 0.43);
+    border-radius: 5px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.prox-grid-item.visible {
+    display: flex;
+}
+
+.prox-bar {
+    display: flex;
+    background-color: rgba(0, 86, 0, 0.771);
+    height: 100%;
+    width: 100%;
+    z-index: 4;
+}
+
+.prox-text {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+/* on screen Keyboard */
 main .keyboard-container {
     margin-top: 1%;
     display: grid;
     align-self: center;
-    gap: 10px;
+    gap: var(--standard-gap);
     scale: var(--global-scale)
 }
 
 .keyboard-container .grid-row {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: var(--standard-gap);
 }
 
 .grid-row .keyboard-item {

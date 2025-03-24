@@ -42,6 +42,9 @@ function getHints(targetWord) {
 
 
 // proximity api integration
+const proxContainer = Array.from(document.getElementsByClassName('prox-grid-item'));
+const proxTexts = Array.from(document.getElementsByClassName('prox-text'))
+
 function getProximity(joinedGuess) {
   fetch(`https://api.conceptnet.io/related/c/en/${targetWord}?filter=/c/en/${joinedGuess}`)
     .then(response => response.json())
@@ -51,7 +54,13 @@ function getProximity(joinedGuess) {
           alert("Correct!")
           clearBoard();
         } else {
-          alert(`Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`);
+          let barContainer = proxContainer[currentRowIndex - 2];
+          let bar = barContainer.querySelector('.prox-bar');
+          let barText = proxTexts[currentRowIndex - 2];
+
+          barContainer.classList.add('visible');
+          barText.textContent = `Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`
+          console.log(bar)
         }
       } else {
         alert(`Proximity: 0`)
@@ -149,9 +158,11 @@ function clearBoard() {
   getRandom()
 }
 
-document.getElementById('reroll').addEventListener('click', function() {
+document.getElementById('reroll').addEventListener('click', function () {
   hintRoll = [];
   getHints(targetWord)
 });
 
-getRandom();
+window.onload = function () {
+  getRandom();
+}
