@@ -15,6 +15,7 @@ function getRandom() {
       console.log(targetWord)
     })
 }
+
 // hints api integration
 function getHints(targetWord) {
   fetch(`https://api.datamuse.com/words?rel_trg=${targetWord}`)
@@ -42,25 +43,27 @@ function getHints(targetWord) {
 
 
 // proximity api integration
-const proxContainer = Array.from(document.getElementsByClassName('prox-grid-item'));
-const proxTexts = Array.from(document.getElementsByClassName('prox-text'))
-
+const proxContainer = document.getElementsByClassName('prox-grid-item');
+const proxBar = document.getElementsByClassName('prox-bar');
+const proxTexts = document.getElementsByClassName('prox-text');
 function getProximity(joinedGuess) {
   fetch(`https://api.conceptnet.io/related/c/en/${targetWord}?filter=/c/en/${joinedGuess}`)
     .then(response => response.json())
     .then(data => {
       if (data.related && data.related.length > 0) {
-        if (data.related[0].weight == 1) {
-          alert("Correct!")
+        let barContainer = proxContainer[currentRowIndex - 2];
+        let barText = proxTexts[currentRowIndex - 2];
+
+        barContainer.classList.add('visible');
+        barText.textContent = `Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`
+        if (data.related[0].weight < 0) {
+          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`
+        } else if (data.related[0].weight == 1) {
+          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`
+
           clearBoard();
         } else {
-          let barContainer = proxContainer[currentRowIndex - 2];
-          let bar = barContainer.querySelector('.prox-bar');
-          let barText = proxTexts[currentRowIndex - 2];
-
-          barContainer.classList.add('visible');
-          barText.textContent = `Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`
-          console.log(bar)
+          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
         }
       } else {
         alert(`Proximity: 0`)

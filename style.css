@@ -110,7 +110,7 @@ main .grid-container {
     border-radius: 5px;
     display: none;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
 }
 
@@ -122,15 +122,18 @@ main .grid-container {
     display: flex;
     background-color: rgba(0, 86, 0, 0.771);
     height: 100%;
-    width: 100%;
+    width: 0%;
     z-index: 4;
 }
 
 .prox-text {
+    position: absolute;
     display: flex;
     text-align: center;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    width: 100%;
     z-index: 5;
 }
 /* on screen Keyboard */
