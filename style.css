@@ -35,7 +35,7 @@
 }
 
 html body {
-    min-height: 100%;
+    max-height: 100%;
     margin: 0;
     color: var(--primary-text-color);
     font-family: var(--font-family);
@@ -136,9 +136,10 @@ main .grid-container {
     width: 100%;
     z-index: 5;
 }
+
+
 /* on screen Keyboard */
 main .keyboard-container {
-    margin-top: 1%;
     display: grid;
     align-self: center;
     gap: var(--standard-gap);
@@ -152,9 +153,14 @@ main .keyboard-container {
 }
 
 .grid-row .keyboard-item {
-    padding: 25px;
+    display: flex;
+    min-width: 50px;
+    height: 50px;
     border-radius: 5px;
-    background-color: var(--button-color)
+    background-color: var(--button-color);
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
 }
 
 .keyboard-item:hover {
