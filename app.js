@@ -12,7 +12,7 @@ function getRandom() {
     .then(wordData => {
       targetWord = wordData[0]
       getHints(targetWord)
-      console.log(targetWord)
+      // console.log(targetWord)
     })
 }
 
@@ -31,7 +31,19 @@ function getHints(targetWord) {
       } else {
         for (let i = 0; i < 5; i++) {
           index = Math.floor(Math.random() * data.length)
-          hintRoll.push(data[index]['word']);
+          let isDuplicate = false;
+          for (let w = 0; w < hintRoll.length; w++) {
+            if (data[index]['word'] == hintRoll[w]) {
+              isDuplicate = true;
+              console.log(isDuplicate)
+              w -= 1;
+              isDuplicate = false;
+            }
+          }
+          if (!isDuplicate) {
+            console.log('jimbo')
+            hintRoll.push(data[index]['word']);
+          }
         }
         hintLabel.textContent = hintRoll.join(', ');
       }
