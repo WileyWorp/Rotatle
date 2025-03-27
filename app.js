@@ -1,5 +1,7 @@
 // random words api integration
 let hintRoll = [];
+let pastHints = [];
+let hintCountDown = 3;
 const hintLabel = document.getElementById('hintLabel');
 function getRandom() {
   fetch("https://random-word-api.herokuapp.com/word?length=5&lang=en")
@@ -15,7 +17,6 @@ function getRandom() {
       // console.log(targetWord)
     })
 }
-
 // hints api integration
 function getHints(targetWord) {
   fetch(`https://api.datamuse.com/words?rel_trg=${targetWord}`)
@@ -29,23 +30,20 @@ function getHints(targetWord) {
       if (data.length < 15) {
         getRandom()
       } else {
-        for (let i = 0; i < 5; i++) {
+        while (hintRoll.length < 5) {
           index = Math.floor(Math.random() * data.length)
-          let isDuplicate = false;
-          for (let w = 0; w < hintRoll.length; w++) {
-            if (data[index]['word'] == hintRoll[w]) {
-              isDuplicate = true;
-              console.log(isDuplicate)
-              w -= 1;
-              isDuplicate = false;
-            }
-          }
-          if (!isDuplicate) {
-            console.log('jimbo')
+          if (!pastHints.includes(data[index]['word'])) {
             hintRoll.push(data[index]['word']);
+            pastHints.push(data[index]['word'])
+          } else {
+            console.log('Duplicate Detected');
           }
         }
-        hintLabel.textContent = hintRoll.join(', ');
+        if (pastHints.length > 10) {
+          alert('You ran out of hints!')
+        } else {
+          hintLabel.textContent = hintRoll.join(', ');
+        }
       }
     })
     .catch(error => {
@@ -72,7 +70,6 @@ function getProximity(joinedGuess) {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`
         } else if (data.related[0].weight == 1) {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`
-
           clearBoard();
         } else {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
@@ -170,6 +167,7 @@ function clearBoard() {
   guesses = [];
   joinedGuess = null;
   hintRoll = [];
+  pastHints = [];
   getRandom()
 }
 
