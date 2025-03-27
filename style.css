@@ -183,6 +183,40 @@ footer {
     margin: 5px;
 }
 
+/* custom alerts */
+.alertContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background: #0000004b;
+}
+
+.alert {
+    height: 50%;
+    width: 50%;
+    background-color: var(--button-color);
+    border-radius: 5px;
+}
+
+.alertHead {
+    display: flex;
+    height: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+.alertX {
+    font-size: 2rem;
+    margin-right: 5px;
+}
+
 /* media queries  */
 @media screen and (max-width: 1920px) and (max-height: 1080px) {
     :root {

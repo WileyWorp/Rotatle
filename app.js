@@ -39,8 +39,9 @@ function getHints(targetWord) {
             console.log('Duplicate Detected');
           }
         }
-        if (pastHints.length > 10) {
-          alert('You ran out of hints!')
+        if (pastHints.length >= 15) {
+          document.getElementById('reroll').style.display = "none";
+          hintLabel.textContent = hintRoll.join(', ');
         } else {
           hintLabel.textContent = hintRoll.join(', ');
         }
@@ -155,14 +156,20 @@ document.addEventListener("keydown", (event) => {
 const pop = new Audio('pop.mp3')
 
 function clearBoard() {
-  deleteInterval = setInterval(function () {
+  tileInterval = setInterval(function () {
     deleteLetter()
     const popClone = pop.cloneNode();
     popClone.play();
     if (currentTileIndex == 0) {
-      clearInterval(deleteInterval)
+      clearInterval(tileInterval)
     }
   }, 50)
+
+  for (p = 0; p < proxContainer.length; p++) {
+    proxContainer[p].classList.remove('visible')
+  }
+
+  document.getElementById('reroll').style.display = "flex";
   currentRowIndex = 1;
   guesses = [];
   joinedGuess = null;
