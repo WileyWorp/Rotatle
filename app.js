@@ -68,15 +68,21 @@ function getProximity(joinedGuess) {
         barContainer.classList.add('visible');
         barText.textContent = `Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`
         if (data.related[0].weight < 0) {
-          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`
+          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`;
         } else if (data.related[0].weight == 1) {
-          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`
-          clearBoard();
+          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`;
+          document.querySelector('.alertText').textContent = "Correct! Click the X to review your guesses and feel free to play again.";
+          document.querySelector('.alertContainer').classList.add('visible');
         } else {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
         }
       } else {
-        alert(`Proximity: 0`)
+        let barContainer = proxContainer[currentRowIndex - 2];
+        let barText = proxTexts[currentRowIndex - 2];
+
+        barContainer.classList.add('visible');
+        barText.textContent = `Proximity: 0.00%`
+        proxBar[currentRowIndex - 2].style.width = `0%`
       }
     })
 }
@@ -100,18 +106,15 @@ function handleInput(key) {
     // Handle word submission logic
     if (currentTileIndex == currentRowIndex * 5) {
       // get the guessed word
-      joinedGuess = currentGuessList.join('').toLowerCase(),
-        guesses.push(joinedGuess)
+      joinedGuess = currentGuessList.join('').toLowerCase();
+      guesses.push(joinedGuess);
       getProximity(joinedGuess);
       currentGuessList = [];
       joinedGuess = "";
       currentRowIndex++;
     }
-    else if (guesses.length == 6) {
-      alert('Kill yourself')
-    }
     else {
-      alert("Invalid input!")
+      proxBar[currentRowIndex - 2].style.animationPlayState = "running";
     }
   } else if (key === "<") {
     if (currentRowIndex != (currentTileIndex / 5) + 1) {
@@ -176,13 +179,24 @@ function clearBoard() {
   hintRoll = [];
   pastHints = [];
   getRandom()
-}
+};
 
 document.getElementById('reroll').addEventListener('click', function () {
   hintRoll = [];
   getHints(targetWord)
 });
 
+document.querySelector('.alertX').addEventListener('click', function () {
+  document.querySelector('.alertContainer').classList.remove('visible');
+  document.querySelector('.alertText').textContent = "";
+  document.querySelector('.playAgainBtn').classList.add('visible')
+});
+
+document.querySelector('.playAgainBtn').addEventListener('click', function () {
+  document.querySelector('.playAgainBtn').classList.remove('visible')
+  clearBoard();
+});
+
 window.onload = function () {
   getRandom();
-}
+};
