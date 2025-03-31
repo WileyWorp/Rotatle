@@ -3,7 +3,7 @@
     --background-color: #1a1a2e;
     --primary-text-color: #ffffff;
     --secondary-text-color: #d1d1e0;
-    --tile-color: #16213e;
+    --tile-color: #16213e87;
     --correct-tile-color: #6a994e;
     --close-tile-color: #f2bb05;
     --incorrect-tile-color: #ef233c;
@@ -29,11 +29,13 @@
     --button-border-radius: 8px;
     --tile-border: 2px solid var(--secondary-text-color);
 
+    /* Standardized things */
     --global-scale: 1;
+    --standard-gap: 10px;
 }
 
 html body {
-    min-height: 100%;
+    max-height: 100%;
     margin: 0;
     color: var(--primary-text-color);
     font-family: var(--font-family);
@@ -52,6 +54,7 @@ html body main {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 html body main header {
@@ -77,10 +80,10 @@ html body main header {
 main .grid-container {
     align-self: center;
     display: grid;
-    gap: 10px;
+    gap: var(--standard-gap);
     grid-template-rows: repeat(6, 100px);
     grid-template-columns: repeat(5, 100px);
-    scale: var(--global-scale)
+    scale: var(--global-scale);
 }
 
 .grid-container .grid-item {
@@ -92,24 +95,77 @@ main .grid-container {
     font-size: 5rem;
 }
 
-main .keyboard-container {
-    margin-top: 1%;
-    display: grid;
+/* Proximity bars */
+.prox-grid-container {
+    position: absolute;
     align-self: center;
-    gap: 10px;
+    display: grid;
+    gap: var(--standard-gap);
+    grid-template-rows: repeat(6, 100px);
+    height: 100%;
+    width: 100%;
+}
+
+.prox-grid-item {
+    background-color: rgba(22, 54, 82, 0.43);
+    border-radius: 5px;
+    display: none;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.prox-grid-item.visible {
+    display: flex;
+}
+
+.prox-bar {
+    display: flex;
+    background-color: rgba(0, 86, 0, 0.771);
+    height: 100%;
+    width: 0%;
+    z-index: 4;
+}
+
+.prox-text {
+    position: absolute;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 5;
+}
+
+
+/* on screen Keyboard */
+main .keyboard-container {
+    margin-top: calc(1% * var(--global-scale));
+    display: none;
+    align-self: center;
+    gap: var(--standard-gap);
     scale: var(--global-scale)
+}
+
+.keyboard-container.visible {
+    display: grid;
 }
 
 .keyboard-container .grid-row {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: var(--standard-gap);
 }
 
 .grid-row .keyboard-item {
-    padding: 25px;
+    display: flex;
+    min-width: 50px;
+    height: 50px;
     border-radius: 5px;
-    background-color: var(--button-color)
+    background-color: var(--button-color);
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
 }
 
 .keyboard-item:hover {
@@ -130,6 +186,83 @@ footer {
 
 .reroll {
     margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* custom alerts */
+.alertContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background: #0000004b;
+}
+
+.alertContainer.visible {
+    display: flex;
+}
+
+.alert {
+    height: 50%;
+    width: 50%;
+    background-color: var(--button-color);
+    border-radius: 5px;
+}
+
+.alertHead {
+    display: flex;
+    height: 10%;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.alertX {
+    font-size: 4.5rem;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.alertTextDiv {
+    display: flex;
+    height: 80%;
+    width: 100%;
+}
+
+.alertText {
+    font-size: 2rem;
+    margin: 0 5px;
+    user-select: none;
+}
+
+/* Play Again */
+
+.playAgainBtn {
+    display: none;
+    margin-top: 5%;
+    height: 100px;
+    width: 200px;
+    color: var(--primary-text-color);
+    background-color: var(--tile-color);
+    border-radius: 5px;
+    border: none;
+    scale: var(--global-scale);
+    font-size: 2rem;
+}
+
+.playAgainBtn:hover {
+    cursor: pointer;
+}
+
+.playAgainBtn.visible {
+    display: block;
 }
 
 /* media queries  */
@@ -142,5 +275,9 @@ footer {
 @media screen and (max-width: 720px) and (max-height: 1280px) {
     :root {
         --global-scale: .5;
+    }
+
+    .alertText p {
+        font-size: 1.5rem;
     }
 }

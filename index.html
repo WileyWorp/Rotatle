@@ -9,13 +9,13 @@
 </head>
 
 <body>
-    <audio id="pop">
+    <!-- <audio id="pop">
         <source src="pop.mp3" type="audio/mpeg">
-    </audio>
+    </audio> -->
     <main>
         <header>Welcome to Rotatle</header>
         <div class="hints">
-            <button class="reroll" id="reroll">reroll</button>
+            <button class="reroll">reroll</button>
             <p>Hint Roll:&nbsp</p>
             <label id="hintLabel" class="hintLabel"></label>
         </div>
@@ -50,8 +50,34 @@
             <div class="grid-item"></div>
             <div class="grid-item"></div>
             <div class="grid-item"></div>
+            <div class="prox-grid-container">
+                <div class="prox-grid-item">
+                    <div class="prox-bar" id="prox-bar"></div>
+                    <label class="prox-text"></label>
+                </div>
+                <div class="prox-grid-item">
+                    <div class="prox-bar" id="prox-bar"></div>
+                    <label class="prox-text"></label>
+                </div>
+                <div class="prox-grid-item">
+                    <div class="prox-bar" id="prox-bar"></div>
+                    <label class="prox-text"></label>
+                </div>
+                <div class="prox-grid-item">
+                    <div class="prox-bar" id="prox-bar"></div>
+                    <label class="prox-text"></label>
+                </div>
+                <div class="prox-grid-item">
+                    <div class="prox-bar" id="prox-bar"></div>
+                    <label class="prox-text"></label>
+                </div>
+                <div class="prox-grid-item">
+                    <div class="prox-bar" id="prox-bar"></div>
+                    <label class="prox-text"></label>
+                </div>
+            </div>
         </div>
-        <div class="keyboard-container">
+        <div class="keyboard-container visible">
             <div class="grid-row">
                 <div class="keyboard-item">Q</div>
                 <div class="keyboard-item">W</div>
@@ -84,13 +110,30 @@
                 <div class="keyboard-item">B</div>
                 <div class="keyboard-item">N</div>
                 <div class="keyboard-item">M</div>
-                <div class="keyboard-item"><</div>
+                <div class="keyboard-item">&lt;</div>
             </div>
         </div>
-        <footer>
-            <p>&copy Worp Games 2025</p>
-        </footer>
+        <div class="playAgainDiv">
+            <button class="playAgainBtn">Play Again!</button>
+        </div>
     </main>
+    <div class="alertContainer">
+        <div class="alert">
+            <div class="alertHead">
+                <div class="alertX">x</div>
+            </div>
+            <div class="alertTextDiv">
+                <p class="alertText">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Esse tenetur, dolorum rem illo eum itaque explicabo,
+                    omnis voluptatibus et eveniet quam nemo iure est quasi odio ab ipsa voluptate fuga.
+                </p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy Worp Games 2025</p>
+    </footer>
 </body>
 <script src="app.js"></script>
 
