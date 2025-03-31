@@ -133,7 +133,6 @@ main .grid-container {
     text-align: center;
     align-items: center;
     justify-content: center;
-    height: 100%;
     width: 100%;
     z-index: 5;
 }
@@ -142,10 +141,14 @@ main .grid-container {
 /* on screen Keyboard */
 main .keyboard-container {
     margin-top: calc(1% * var(--global-scale));
-    display: grid;
+    display: none;
     align-self: center;
     gap: var(--standard-gap);
     scale: var(--global-scale)
+}
+
+.keyboard-container.visible {
+    display: grid;
 }
 
 .keyboard-container .grid-row {
@@ -186,6 +189,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
 }
 
 /* custom alerts */
@@ -235,6 +239,7 @@ footer {
 .alertText {
     font-size: 2rem;
     margin: 0 5px;
+    user-select: none;
 }
 
 /* Play Again */

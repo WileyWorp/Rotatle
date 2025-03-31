@@ -35,12 +35,10 @@ function getHints(targetWord) {
           if (!pastHints.includes(data[index]['word'])) {
             hintRoll.push(data[index]['word']);
             pastHints.push(data[index]['word'])
-          } else {
-            console.log('Duplicate Detected');
           }
         }
         if (pastHints.length >= 15) {
-          document.getElementById('reroll').style.display = "none";
+          document.querySelector('.reroll').style.display = "none";
           hintLabel.textContent = hintRoll.join(', ');
         } else {
           hintLabel.textContent = hintRoll.join(', ');
@@ -70,9 +68,10 @@ function getProximity(joinedGuess) {
         if (data.related[0].weight < 0) {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`;
         } else if (data.related[0].weight == 1) {
-          proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`;
+          proxBar[currentRowIndex - 2].style.width = '100%';
           document.querySelector('.alertText').textContent = "Correct! Click the X to review your guesses and feel free to play again.";
           document.querySelector('.alertContainer').classList.add('visible');
+          document.querySelector('.keyboard-container').classList.remove('visible');
         } else {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
         }
@@ -87,7 +86,10 @@ function getProximity(joinedGuess) {
     })
 }
 
-
+document.querySelector('.reroll').addEventListener('click', function () {
+  hintRoll = [];
+  getHints(targetWord)
+});
 
 const gridItems = document.querySelectorAll(".grid-item");
 const keyboardItems = document.querySelectorAll(".keyboard-item");
@@ -112,8 +114,16 @@ function handleInput(key) {
       currentGuessList = [];
       joinedGuess = "";
       currentRowIndex++;
-    }
-    else {
+      document.querySelector('.reroll').addEventListener('click', function () {
+        hintRoll = [];
+        getHints(targetWord);
+  });
+    } else if (currentRowIndex == 7) {
+      document.querySelector('.alertContainer').classList.add('visible');
+      document.querySelector('.alertText').textContent = "You are out of guesses!";
+      document.querySelector('.keyboard-container').classList.remove('visible');
+      document.querySelector('.playAgainBtn').classList.add('visible');
+    } else {
       proxBar[currentRowIndex - 2].style.animationPlayState = "running";
     }
   } else if (key === "<") {
@@ -172,7 +182,7 @@ function clearBoard() {
     proxContainer[p].classList.remove('visible')
   }
 
-  document.getElementById('reroll').style.display = "flex";
+  document.querySelector('.reroll').style.display = "flex";
   currentRowIndex = 1;
   guesses = [];
   joinedGuess = null;
@@ -181,19 +191,15 @@ function clearBoard() {
   getRandom()
 };
 
-document.getElementById('reroll').addEventListener('click', function () {
-  hintRoll = [];
-  getHints(targetWord)
-});
-
 document.querySelector('.alertX').addEventListener('click', function () {
   document.querySelector('.alertContainer').classList.remove('visible');
   document.querySelector('.alertText').textContent = "";
-  document.querySelector('.playAgainBtn').classList.add('visible')
+  document.querySelector('.playAgainBtn').classList.add('visible');
 });
 
 document.querySelector('.playAgainBtn').addEventListener('click', function () {
-  document.querySelector('.playAgainBtn').classList.remove('visible')
+  document.querySelector('.playAgainBtn').classList.remove('visible');
+  document.querySelector('.keyboard-container').classList.add('visible');
   clearBoard();
 });
 
