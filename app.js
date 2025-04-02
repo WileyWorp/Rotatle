@@ -76,12 +76,16 @@ function getProximity(joinedGuess) {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
         }
       } else {
-        let barContainer = proxContainer[currentRowIndex - 2];
-        let barText = proxTexts[currentRowIndex - 2];
-
-        barContainer.classList.add('visible');
-        barText.textContent = `Proximity: 0.00%`
-        proxBar[currentRowIndex - 2].style.width = `0%`
+        document.querySelector('.alertContainer').classList.add('visible');
+        document.querySelector('.alertText').textContent = `The word ${joinedGuess} is not recognized. Try again.`;
+        currentRowIndex--
+        for (l = 0; l < 5; l++) {
+          deleteLetter()
+          if (muted == false) {
+            const popClone = pop.cloneNode();
+            popClone.play();
+          }
+        }
       }
     })
 }
@@ -105,26 +109,20 @@ keyboardItems.forEach(item => {
 
 function handleInput(key) {
   if (key === "ENTER") {
-    // Handle word submission logic
-    if (currentTileIndex == currentRowIndex * 5) {
-      // get the guessed word
-      joinedGuess = currentGuessList.join('').toLowerCase();
-      guesses.push(joinedGuess);
-      getProximity(joinedGuess);
-      currentGuessList = [];
-      joinedGuess = "";
-      currentRowIndex++;
-      document.querySelector('.reroll').addEventListener('click', function () {
-        hintRoll = [];
-        getHints(targetWord);
-  });
-    } else if (currentRowIndex == 7) {
+    // Handle word submission logic    
+    joinedGuess = currentGuessList.join('').toLowerCase();
+    guesses.push(joinedGuess);
+    getProximity(joinedGuess);
+    currentGuessList = [];
+    joinedGuess = "";
+    if (currentRowIndex >= 6) {
       document.querySelector('.alertContainer').classList.add('visible');
-      document.querySelector('.alertText').textContent = "You are out of guesses!";
+      document.querySelector('.alertText').textContent = `You are out of guesses! The word was ${targetWord}.`;
       document.querySelector('.keyboard-container').classList.remove('visible');
       document.querySelector('.playAgainBtn').classList.add('visible');
-    } else {
-      proxBar[currentRowIndex - 2].style.animationPlayState = "running";
+    } else if (currentTileIndex == currentRowIndex * 5) {
+      // get the guessed word
+      currentRowIndex++;
     }
   } else if (key === "<") {
     if (currentRowIndex != (currentTileIndex / 5) + 1) {
@@ -171,8 +169,10 @@ const pop = new Audio('pop.mp3')
 function clearBoard() {
   tileInterval = setInterval(function () {
     deleteLetter()
-    const popClone = pop.cloneNode();
-    popClone.play();
+    if (muted == false) {
+      const popClone = pop.cloneNode();
+      popClone.play();
+    }
     if (currentTileIndex == 0) {
       clearInterval(tileInterval)
     }
@@ -202,6 +202,20 @@ document.querySelector('.playAgainBtn').addEventListener('click', function () {
   document.querySelector('.keyboard-container').classList.add('visible');
   clearBoard();
 });
+
+let muted = false;
+
+document.querySelector('.mute-container').addEventListener('click', function () {
+  if (muted == false) {
+    muted = true;
+    document.querySelector('.mute-container').style.backgroundImage = "url('img/muted.png')"
+    document.querySelector('.mute-container').title = "unmute"
+  } else {
+    muted = false;
+    document.querySelector('.mute-container').style.backgroundImage = "url('img/unmuted.png')"
+    document.querySelector('.mute-container').title = "mute"
+  }
+})
 
 window.onload = function () {
   getRandom();

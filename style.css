@@ -1,33 +1,15 @@
 :root {
     /* Color Palette */
     --background-color: #1a1a2e;
-    --primary-text-color: #ffffff;
-    --secondary-text-color: #d1d1e0;
+    --text-color: #ffffff;
     --tile-color: #16213e87;
-    --correct-tile-color: #6a994e;
-    --close-tile-color: #f2bb05;
-    --incorrect-tile-color: #ef233c;
     --button-color: #3a506b;
     --button-hover-color: #5bc0eb;
 
-    /* Typography */
+    /* Text */
     --font-family: 'Poppins', sans-serif;
     --primary-font-size: 16px;
     --heading-font-size: 2rem;
-
-    /* Layout */
-    --tile-size: 60px;
-    --tile-spacing: 10px;
-    --board-padding: 20px;
-
-    /* Animation Durations */
-    --tile-flip-duration: 0.6s;
-    --button-hover-transition: 0.3s;
-
-    /* Borders and Radius */
-    --tile-border-radius: 8px;
-    --button-border-radius: 8px;
-    --tile-border: 2px solid var(--secondary-text-color);
 
     /* Standardized things */
     --global-scale: 1;
@@ -37,7 +19,7 @@
 html body {
     max-height: 100%;
     margin: 0;
-    color: var(--primary-text-color);
+    color: var(--text-color);
     font-family: var(--font-family);
     font-size: var(--primary-font-size);
 }
@@ -137,7 +119,6 @@ main .grid-container {
     z-index: 5;
 }
 
-
 /* on screen Keyboard */
 main .keyboard-container {
     margin-top: calc(1% * var(--global-scale));
@@ -185,11 +166,15 @@ footer {
 }
 
 .reroll {
+    background-color: var(--button-color);
+    color: var(--text-color);
     margin: 5px;
+    padding: 0 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 /* custom alerts */
@@ -249,7 +234,7 @@ footer {
     margin-top: 5%;
     height: 100px;
     width: 200px;
-    color: var(--primary-text-color);
+    color: var(--text-color);
     background-color: var(--tile-color);
     border-radius: 5px;
     border: none;
@@ -263,6 +248,21 @@ footer {
 
 .playAgainBtn.visible {
     display: block;
+}
+
+/* Mute button */
+.mute-container {
+    position: absolute;
+    background-image: url(img/unmuted.png); /* muting images courtesy of Dylan Burin (classmate) */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 /* media queries  */
