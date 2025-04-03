@@ -52,6 +52,7 @@ function getHints(targetWord) {
 
 
 // proximity api integration
+let hintsUsed = 0;
 const proxContainer = document.getElementsByClassName('prox-grid-item');
 const proxBar = document.getElementsByClassName('prox-bar');
 const proxTexts = document.getElementsByClassName('prox-text');
@@ -60,18 +61,20 @@ function getProximity(joinedGuess) {
     .then(response => response.json())
     .then(data => {
       if (data.related && data.related.length > 0) {
-        let barContainer = proxContainer[currentRowIndex - 2];
-        let barText = proxTexts[currentRowIndex - 2];
-
-        barContainer.classList.add('visible');
-        barText.textContent = `Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`
+        proxContainer[currentRowIndex - 2].classList.add('visible');
+        proxTexts[currentRowIndex - 2].textContent = `Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`
         if (data.related[0].weight < 0) {
+          proxBar[currentRowIndex - 2].style.backgroundColor = 'rgba(168, 0, 0, 0.77)';
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`;
         } else if (data.related[0].weight == 1) {
-          proxBar[currentRowIndex - 2].style.width = '100%';
-          document.querySelector('.alertText').textContent = "Correct! Click the X to review your guesses and feel free to play again.";
+          if (hintsUsed == 1) {
+            document.querySelector('.alertText').textContent = `Correct! Click the X to review your guesses and feel free to play again. \n \n You used 1 hint.`;
+          } else {
+            document.querySelector('.alertText').textContent = `Correct! Click the X to review your guesses and feel free to play again. \n \n You used ${hintsUsed} hints.`;
+          }
           document.querySelector('.alertContainer').classList.add('visible');
           document.querySelector('.keyboard-container').classList.remove('visible');
+          proxBar[currentRowIndex - 2].style.width = '100%';
         } else {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
         }
@@ -79,7 +82,7 @@ function getProximity(joinedGuess) {
         document.querySelector('.alertContainer').classList.add('visible');
         document.querySelector('.alertText').textContent = `The word ${joinedGuess} is not recognized. Try again.`;
         currentRowIndex--
-        for (l = 0; l < 5; l++) {
+        for (l = 0; l < currentGuessList.length; l++) {
           deleteLetter()
           if (muted == false) {
             const popClone = pop.cloneNode();
@@ -92,6 +95,7 @@ function getProximity(joinedGuess) {
 
 document.querySelector('.reroll').addEventListener('click', function () {
   hintRoll = [];
+  hintsUsed++;
   getHints(targetWord)
 });
 
@@ -109,19 +113,19 @@ keyboardItems.forEach(item => {
 
 function handleInput(key) {
   if (key === "ENTER") {
-    // Handle word submission logic    
-    joinedGuess = currentGuessList.join('').toLowerCase();
-    guesses.push(joinedGuess);
-    getProximity(joinedGuess);
-    currentGuessList = [];
-    joinedGuess = "";
+    // Handle word submission logic  
     if (currentRowIndex >= 6) {
       document.querySelector('.alertContainer').classList.add('visible');
       document.querySelector('.alertText').textContent = `You are out of guesses! The word was ${targetWord}.`;
       document.querySelector('.keyboard-container').classList.remove('visible');
       document.querySelector('.playAgainBtn').classList.add('visible');
+      getProximity(joinedGuess)
     } else if (currentTileIndex == currentRowIndex * 5) {
-      // get the guessed word
+      joinedGuess = currentGuessList.join('').toLowerCase();
+      guesses.push(joinedGuess);
+      getProximity(joinedGuess);
+      currentGuessList = [];
+      joinedGuess = "";
       currentRowIndex++;
     }
   } else if (key === "<") {
@@ -188,7 +192,8 @@ function clearBoard() {
   joinedGuess = null;
   hintRoll = [];
   pastHints = [];
-  getRandom()
+  hintsUsed = 0;
+  getRandom();
 };
 
 document.querySelector('.alertX').addEventListener('click', function () {
