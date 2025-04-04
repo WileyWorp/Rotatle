@@ -1,3 +1,19 @@
+// toastify
+function toast(toastText) {
+  Toastify({
+    text: toastText,
+    duration: 1500,
+    close: true,
+    gravity: "top",
+    position: "center",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to bottom,rgb(34, 156, 156),rgb(40, 107, 196))",
+    },
+    onClick: function () { }
+  }).showToast();
+}
+
 // random words api integration
 let hintRoll = [];
 let pastHints = [];
@@ -68,19 +84,17 @@ function getProximity(joinedGuess) {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`;
         } else if (data.related[0].weight == 1) {
           if (hintsUsed == 1) {
-            document.querySelector('.alertText').textContent = `Correct! Click the X to review your guesses and feel free to play again. \n \n You used 1 hint.`;
+            toast("Correct! Review your guesses and feel free to play again. \n You used 1 hint.")
           } else {
-            document.querySelector('.alertText').textContent = `Correct! Click the X to review your guesses and feel free to play again. \n \n You used ${hintsUsed} hints.`;
+            toast(`Correct! Review your guesses and feel free to play again. \n You used ${hintsUsed} hint.`)
           }
-          document.querySelector('.alertContainer').classList.add('visible');
           document.querySelector('.keyboard-container').classList.remove('visible');
           proxBar[currentRowIndex - 2].style.width = '100%';
         } else {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
         }
       } else {
-        document.querySelector('.alertContainer').classList.add('visible');
-        document.querySelector('.alertText').textContent = `The word ${joinedGuess} is not recognized. Try again.`;
+        toast(`The word ${joinedGuess} is not recognized. Try again.`)
         currentRowIndex--
         for (l = 0; l < currentGuessList.length; l++) {
           deleteLetter()
@@ -115,8 +129,7 @@ function handleInput(key) {
   if (key === "ENTER") {
     // Handle word submission logic  
     if (currentRowIndex >= 6) {
-      document.querySelector('.alertContainer').classList.add('visible');
-      document.querySelector('.alertText').textContent = `You are out of guesses! The word was ${targetWord}.`;
+      toast(`You are out of guesses! The word was ${targetWord}.`);
       document.querySelector('.keyboard-container').classList.remove('visible');
       document.querySelector('.playAgainBtn').classList.add('visible');
       getProximity(joinedGuess)
@@ -195,12 +208,6 @@ function clearBoard() {
   hintsUsed = 0;
   getRandom();
 };
-
-document.querySelector('.alertX').addEventListener('click', function () {
-  document.querySelector('.alertContainer').classList.remove('visible');
-  document.querySelector('.alertText').textContent = "";
-  document.querySelector('.playAgainBtn').classList.add('visible');
-});
 
 document.querySelector('.playAgainBtn').addEventListener('click', function () {
   document.querySelector('.playAgainBtn').classList.remove('visible');

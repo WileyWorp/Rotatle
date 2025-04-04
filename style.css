@@ -157,14 +157,6 @@ main .keyboard-container {
     transform: scale(.95);
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
 .reroll {
     background-color: var(--button-color);
     color: var(--text-color);
@@ -176,57 +168,6 @@ footer {
     border-radius: 3px;
     cursor: pointer;
 }
-
-/* custom alerts */
-.alertContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: none;
-    height: 100%;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    background: #0000004b;
-}
-
-.alertContainer.visible {
-    display: flex;
-}
-
-.alert {
-    height: 50%;
-    width: 50%;
-    background-color: var(--button-color);
-    border-radius: 5px;
-}
-
-.alertHead {
-    display: flex;
-    height: 10%;
-    width: 100%;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.alertX {
-    font-size: 4.5rem;
-    margin-right: 5px;
-    cursor: pointer;
-}
-
-.alertTextDiv {
-    display: flex;
-    height: 80%;
-    width: 100%;
-}
-
-.alertText {
-    font-size: 2rem;
-    margin: 0 5px;
-    user-select: none;
-}
-
 /* Play Again */
 
 .playAgainBtn {
@@ -253,7 +194,7 @@ footer {
 /* Mute button */
 .mute-container {
     position: absolute;
-    background-image: url(img/unmuted.png); /* muting images courtesy of Dylan Burin (classmate) */
+    background-image: url(img/unmuted.png); /* muting images courtesy of ChatGPT's new image generation */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -275,9 +216,5 @@ footer {
 @media screen and (max-width: 720px) and (max-height: 1280px) {
     :root {
         --global-scale: .5;
-    }
-
-    .alertText p {
-        font-size: 1.5rem;
     }
 }
