@@ -8,11 +8,27 @@ function toast(toastText) {
     position: "center",
     stopOnFocus: true,
     style: {
-      background: "linear-gradient(to bottom,rgb(34, 156, 156),rgb(40, 107, 196))",
+      background: "linear-gradient(to bottom,rgb(25, 100, 143),rgb(22, 79, 155))",
     },
     onClick: function () { }
   }).showToast();
 }
+
+function endToast(toastText) {
+  Toastify({
+    text: toastText,
+    close: true,
+    gravity: "top",
+    position: "center",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to bottom,rgb(25, 100, 143),rgb(22, 79, 155))",
+    },
+    onClick: function () { }
+  }).showToast();
+}
+// Locking inputs
+let inputLock = false;
 
 // random words api integration
 let hintRoll = [];
@@ -30,9 +46,9 @@ function getRandom() {
     .then(wordData => {
       targetWord = wordData[0]
       getHints(targetWord)
-      // console.log(targetWord)
     })
 }
+
 // hints api integration
 function getHints(targetWord) {
   fetch(`https://api.datamuse.com/words?rel_trg=${targetWord}`)
@@ -77,33 +93,47 @@ function getProximity(joinedGuess) {
     .then(response => response.json())
     .then(data => {
       if (data.related && data.related.length > 0) {
+        guesses.push(joinedGuess);
         proxContainer[currentRowIndex - 2].classList.add('visible');
         proxTexts[currentRowIndex - 2].textContent = `Proximity: ${(data.related[0].weight * 100).toFixed(2)}%`
         if (data.related[0].weight < 0) {
           proxBar[currentRowIndex - 2].style.backgroundColor = 'rgba(168, 0, 0, 0.77)';
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * -100).toFixed(2)}%`;
+          inputLock = false;
         } else if (data.related[0].weight == 1) {
           if (hintsUsed == 1) {
-            toast("Correct! Review your guesses and feel free to play again. \n You used 1 hint.")
+            endToast("Correct! Review your guesses and feel free to play again. \n You used 1 hint.")
           } else {
-            toast(`Correct! Review your guesses and feel free to play again. \n You used ${hintsUsed} hint.`)
+            endToast(`Correct! Review your guesses and feel free to play again. \n You used ${hintsUsed} hint.`)
           }
           document.querySelector('.keyboard-container').classList.remove('visible');
           proxBar[currentRowIndex - 2].style.width = '100%';
         } else {
           proxBar[currentRowIndex - 2].style.width = `${(data.related[0].weight * 100).toFixed(2)}%`
         }
+        if (guesses.length == 6) {
+          endToast(`You are out of guesses! The word was ${targetWord}`);
+          document.querySelector('.keyboard-container').classList.remove('visible');
+          document.querySelector('.playAgainBtn').classList.add('visible');
+        }
       } else {
         toast(`The word ${joinedGuess} is not recognized. Try again.`)
         currentRowIndex--
-        for (l = 0; l < currentGuessList.length; l++) {
+        let l = 1;
+        incorrectInterval = setInterval(function () {
           deleteLetter()
           if (muted == false) {
             const popClone = pop.cloneNode();
             popClone.play();
           }
-        }
+          if (l >= joinedGuess.length) {
+            clearInterval(incorrectInterval)
+            inputLock = false;
+          }
+          l++
+        }, 50)
       }
+      inputLock = false;
     })
 }
 
@@ -126,27 +156,26 @@ keyboardItems.forEach(item => {
 });
 
 function handleInput(key) {
-  if (key === "ENTER") {
-    // Handle word submission logic  
-    if (currentRowIndex >= 6) {
-      toast(`You are out of guesses! The word was ${targetWord}.`);
-      document.querySelector('.keyboard-container').classList.remove('visible');
-      document.querySelector('.playAgainBtn').classList.add('visible');
-      getProximity(joinedGuess)
-    } else if (currentTileIndex == currentRowIndex * 5) {
-      joinedGuess = currentGuessList.join('').toLowerCase();
-      guesses.push(joinedGuess);
-      getProximity(joinedGuess);
-      currentGuessList = [];
-      joinedGuess = "";
-      currentRowIndex++;
+  if (!inputLock) {
+    if (key === "ENTER") {
+      // Handle word submission logic 
+      inputLock = true;
+      if (currentTileIndex == currentRowIndex * 5) {
+        joinedGuess = currentGuessList.join('').toLowerCase();
+        getProximity(joinedGuess);
+        currentGuessList = [];
+        joinedGuess = "";
+        currentRowIndex++;
+      }
+    } else if (key === "<") {
+      if (currentRowIndex != (currentTileIndex / 5) + 1) {
+        deleteLetter();
+      }
+    } else if (/^[A-Z]$/.test(key)) {
+      addLetter(key);
     }
-  } else if (key === "<") {
-    if (currentRowIndex != (currentTileIndex / 5) + 1) {
-      deleteLetter();
-    }
-  } else if (/^[A-Z]$/.test(key)) {
-    addLetter(key);
+  } else {
+    toast('Input locked')
   }
 }
 
@@ -170,6 +199,11 @@ function deleteLetter() {
 
 // handle user keyboard input
 document.addEventListener("keydown", (event) => {
+  if (event.ctrlKey) {
+    event.preventDefault();
+    return;
+  }
+
   let key = event.key.toUpperCase();
 
   if (key === "ENTER") {
@@ -184,6 +218,7 @@ document.addEventListener("keydown", (event) => {
 const pop = new Audio('pop.mp3')
 
 function clearBoard() {
+  inputLock = true;
   tileInterval = setInterval(function () {
     deleteLetter()
     if (muted == false) {
@@ -192,6 +227,8 @@ function clearBoard() {
     }
     if (currentTileIndex == 0) {
       clearInterval(tileInterval)
+    } else {
+      inputLock = false;
     }
   }, 50)
 
@@ -215,6 +252,7 @@ document.querySelector('.playAgainBtn').addEventListener('click', function () {
   clearBoard();
 });
 
+// Muting
 let muted = false;
 
 document.querySelector('.mute-container').addEventListener('click', function () {
