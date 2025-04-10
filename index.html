@@ -6,16 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rotatle</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
-    <!-- <audio id="pop">
-        <source src="pop.mp3" type="audio/mpeg">
-    </audio> -->
+    <div class="mute-container" title="mute">
+        <div class="mute"></div>
+    </div>
     <main>
         <header>Welcome to Rotatle</header>
         <div class="hints">
-            <button class="reroll">reroll</button>
+            <div class="reroll">reroll</div>
             <p>Hint Roll:&nbsp</p>
             <label id="hintLabel" class="hintLabel"></label>
         </div>
@@ -117,24 +118,7 @@
             <button class="playAgainBtn">Play Again!</button>
         </div>
     </main>
-    <div class="alertContainer">
-        <div class="alert">
-            <div class="alertHead">
-                <div class="alertX">x</div>
-            </div>
-            <div class="alertTextDiv">
-                <p class="alertText">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Esse tenetur, dolorum rem illo eum itaque explicabo,
-                    omnis voluptatibus et eveniet quam nemo iure est quasi odio ab ipsa voluptate fuga.
-                </p>
-            </div>
-        </div>
-    </div>
-    <footer>
-        <p>&copy Worp Games 2025</p>
-    </footer>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="app.js"></script>
 </body>
-<script src="app.js"></script>
-
 </html>
